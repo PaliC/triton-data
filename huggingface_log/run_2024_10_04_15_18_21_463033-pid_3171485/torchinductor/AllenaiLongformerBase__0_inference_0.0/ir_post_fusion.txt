@@ -1,0 +1,596 @@
+op0: SchedulerNode(ComputedBuffer)
+op0.writes = [MemoryDep('buf0', c0, {c0: 4096}, None)]
+op0.unmet_dependencies = []
+op0.met_dependencies = [MemoryDep('arg0_1', c0, {c0: 4096}, None)]
+op0.outputs = [
+    buf0: ComputedBuffer
+    buf0.layout = FixedLayout('cuda', torch.int64, size=[4, 1024], stride=[1024, 1])
+    buf0.users = [NodeUser(node=SchedulerNode(name='op1'), can_inplace=False, is_weak=False)]
+]
+op0.group.device = cuda:0
+op0.group.iteration = (4, 1024)
+op0.sizes = ([4], [1024])
+arg0_1_layout = FixedLayout('cuda', torch.int64, size=[4, 1024], stride=[1024, 1])
+buf0_layout = FixedLayout('cuda', torch.int64, size=[4, 1024], stride=[1024, 1])
+class op0_loop_body:
+    var_ranges = {z0: 4, z1: 1024}
+    index0 = 1024*z0 + z1
+    def body(self, ops):
+        get_index = self.get_index('index0')
+        load = ops.load('arg0_1', get_index)
+        constant = ops.constant(1, torch.int64)
+        ne = ops.ne(load, constant)
+        to_dtype = ops.to_dtype(ne, torch.int32, src_dtype = torch.bool)
+        to_dtype_1 = ops.to_dtype(to_dtype, torch.int64, src_dtype = torch.int32)
+        scan1 = self.scan1((torch.int64,), (to_dtype_1,))
+        getitem = scan1[0]
+        get_index_1 = self.get_index('index0')
+        store = ops.store('buf0', get_index_1, getitem, None)
+        return store
+op0 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton.jit
+    def _triton_helper_fn_add0(arg0_0, arg1_0):
+        tmp0 = arg0_0 + arg1_0
+        return tmp0
+
+    @triton_heuristics.persistent_reduction(
+        size_hints=[4, 1024],
+        reduction_hint=ReductionHint.INNER,
+        filename=__file__,
+        triton_meta={'signature': {0: '*i64', 1: '*i64', 2: 'i32', 3: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 3), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': True, 'num_load': 1, 'num_reduction': 0, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False}
+    )
+    @triton.jit
+    def triton_(in_ptr0, out_ptr0, xnumel, rnumel):
+        xnumel = 4
+        XBLOCK: tl.constexpr = 1
+        rnumel = 1024
+        RBLOCK: tl.constexpr = 1024
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = tl.full([1], xoffset, tl.int32)
+        xmask = tl.full([RBLOCK], True, tl.int1)
+        rindex = tl.arange(0, RBLOCK)[:]
+        roffset = 0
+        rmask = tl.full([RBLOCK], True, tl.int1)
+        r1 = rindex
+        x0 = xindex
+        tmp0 = tl.load(in_ptr0 + (r1 + (1024*x0)), None)
+        tmp1 = tl.full([1], 1, tl.int64)
+        tmp2 = tmp0 != tmp1
+        tmp3 = tmp2.to(tl.int32)
+        tmp4 = tmp3.to(tl.int64)
+        tmp5 = tmp4.to(tl.int64)
+        tmp6 = tl.broadcast_to(tmp5, [RBLOCK])
+        tmp7, = tl.associative_scan((tmp6,), 0, _triton_helper_fn_add0)
+        tl.store(out_ptr0 + (r1 + (1024*x0)), tmp7, None)
+
+
+op1_op2_op3_op5: FusedSchedulerNode(SchedulerNode,SchedulerNode,SchedulerNode,SchedulerNode)
+op1_op2_op3_op5.writes = 
+    [   MemoryDep('buf1', c0, {c0: 3145728}, None),
+        MemoryDep('buf2', c0, {c0: 4096}, None),
+        MemoryDep('buf3', c0, {c0: 4096}, None),
+        MemoryDep('buf5', c0, {c0: 3145728}, None)]
+op1_op2_op3_op5.unmet_dependencies = [MemoryDep('buf0', c0, {c0: 4096}, None)]
+op1_op2_op3_op5.met_dependencies = 
+    [   MemoryDep('arg0_1', c0, {c0: 4096}, None),
+        MemoryDep('arg1_1', c1 + 768*tmp0, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg2_1', c1, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg3_1', c1, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg4_1', c1, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg5_1', c1 + 768*tmp11, {c0: 4096, c1: 768}, None)]
+op1_op2_op3_op5.outputs = [
+    buf1: ComputedBuffer
+    buf1.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+    buf1.users = [
+        NodeUser(node=SchedulerNode(name='op2'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op3'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op4'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op5'), can_inplace=True, is_weak=False),
+    ]
+    buf2: ComputedBuffer
+    buf2.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+    buf2.users = [NodeUser(node=SchedulerNode(name='op5'), can_inplace=False, is_weak=False)]
+    buf3: ComputedBuffer
+    buf3.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+    buf3.users = [NodeUser(node=SchedulerNode(name='op5'), can_inplace=False, is_weak=False)]
+    buf5: ComputedBuffer
+    buf5.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+    buf5.users = [NodeUser(node=OUTPUT, can_inplace=False, is_weak=False)]
+]
+op1_op2_op3_op5.snodes[0] =
+op1: SchedulerNode(ComputedBuffer)
+op1.writes = [MemoryDep('buf1', c0, {c0: 3145728}, None)]
+op1.unmet_dependencies = [MemoryDep('buf0', c0, {c0: 4096}, None)]
+op1.met_dependencies = 
+    [   MemoryDep('arg0_1', c0, {c0: 4096}, None),
+        MemoryDep('arg1_1', c1 + 768*tmp0, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg2_1', c1, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg5_1', c1 + 768*tmp11, {c0: 4096, c1: 768}, None)]
+op1.outputs = [
+    buf1: ComputedBuffer
+    buf1.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+    buf1.users = [
+        NodeUser(node=SchedulerNode(name='op2'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op3'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op4'), can_inplace=False, is_weak=False),
+        NodeUser(node=SchedulerNode(name='op5'), can_inplace=True, is_weak=False),
+    ]
+]
+op1.group.device = cuda:0
+op1.group.iteration = (3145728, 1)
+op1.sizes = ([4096, 768], [])
+arg0_1_layout = FixedLayout('cuda', torch.int64, size=[4, 1024], stride=[1024, 1])
+arg1_1_layout = FixedLayout('cuda', torch.float32, size=[50265, 768], stride=[768, 1])
+buf0_layout = FixedLayout('cuda', torch.int64, size=[4, 1024], stride=[1024, 1])
+arg5_1_layout = FixedLayout('cuda', torch.float32, size=[4098, 768], stride=[768, 1])
+arg2_1_layout = FixedLayout('cuda', torch.float32, size=[1, 768], stride=[768, 1])
+buf1_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+class op1_loop_body:
+    var_ranges = {z0: 4096, z1: 768}
+    index0 = z0
+    index1 = 768*indirect0 + z1
+    index2 = 768*indirect1 + z1
+    index3 = 0
+    index4 = 1
+    index5 = z1
+    index6 = 768*z0 + z1
+    def body(self, ops):
+        get_index = self.get_index('index0')
+        load = ops.load('arg0_1', get_index)
+        set_indirect0 = self.set_indirect0(load)
+        get_index_1 = self.get_index('index1')
+        load_1 = ops.load('arg1_1', get_index_1)
+        get_index_2 = self.get_index('index0')
+        load_2 = ops.load('buf0', get_index_2)
+        to_dtype = ops.to_dtype(load_2, torch.int32, src_dtype = torch.int64)
+        get_index_3 = self.get_index('index0')
+        load_3 = ops.load('arg0_1', get_index_3)
+        constant = ops.constant(1, torch.int64)
+        ne = ops.ne(load_3, constant)
+        to_dtype_1 = ops.to_dtype(ne, torch.int32, src_dtype = torch.bool)
+        mul = ops.mul(to_dtype, to_dtype_1)
+        to_dtype_2 = ops.to_dtype(mul, torch.int64, src_dtype = torch.int32)
+        constant_1 = ops.constant(1, torch.int64)
+        add = ops.add(to_dtype_2, constant_1)
+        set_indirect1 = self.set_indirect1(add)
+        get_index_4 = self.get_index('index2')
+        load_4 = ops.load('arg5_1', get_index_4)
+        add_1 = ops.add(load_1, load_4)
+        get_index_5 = self.get_index('index3')
+        get_index_6 = self.get_index('index4')
+        check_bounds = ops.check_bounds(get_index_5, get_index_6, False, False)
+        get_index_7 = self.get_index('index5')
+        load_5 = ops.load('arg2_1', get_index_7)
+        add_2 = ops.add(add_1, load_5)
+        get_index_8 = self.get_index('index6')
+        store = ops.store('buf1', get_index_8, add_2, None)
+        return store
+op1 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.pointwise(
+        size_hints=[4194304], 
+        filename=__file__,
+        triton_meta={'signature': {0: '*i64', 1: '*fp32', 2: '*i64', 3: '*fp32', 4: '*fp32', 5: '*fp32', 6: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3, 4, 5, 6), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': False, 'num_load': 3, 'num_reduction': 0, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False},
+        min_elem_per_thread=0
+    )
+    @triton.jit
+    def triton_(in_ptr0, in_ptr1, in_ptr2, in_ptr3, in_ptr4, out_ptr0, xnumel, XBLOCK : tl.constexpr):
+        xnumel = 3145728
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = xoffset + tl.arange(0, XBLOCK)[:]
+        xmask = tl.full([XBLOCK], True, tl.int1)
+        x1 = (xindex // 768)
+        x0 = xindex % 768
+        x2 = xindex
+        tmp0 = tl.load(in_ptr0 + (x1), None, eviction_policy='evict_last')
+        tmp7 = tl.load(in_ptr2 + (x1), None, eviction_policy='evict_last')
+        tmp22 = tl.load(in_ptr4 + (x0), None, eviction_policy='evict_last')
+        tmp1 = tl.full([XBLOCK], 50265, tl.int32)
+        tmp2 = tmp0 + tmp1
+        tmp3 = tmp0 < 0
+        tmp4 = tl.where(tmp3, tmp2, tmp0)
+        tl.device_assert((0 <= tmp4) & (tmp4 < 50265), "index out of bounds: 0 <= tmp4 < 50265")
+        tmp6 = tl.load(in_ptr1 + (x0 + (768*tmp4)), None)
+        tmp8 = tmp7.to(tl.int32)
+        tmp9 = tl.full([1], 1, tl.int64)
+        tmp10 = tmp0 != tmp9
+        tmp11 = tmp10.to(tl.int32)
+        tmp12 = tmp8 * tmp11
+        tmp13 = tmp12.to(tl.int64)
+        tmp14 = tmp13 + tmp9
+        tmp15 = tl.full([XBLOCK], 4098, tl.int32)
+        tmp16 = tmp14 + tmp15
+        tmp17 = tmp14 < 0
+        tmp18 = tl.where(tmp17, tmp16, tmp14)
+        tl.device_assert((0 <= tmp18) & (tmp18 < 4098), "index out of bounds: 0 <= tmp18 < 4098")
+        tmp20 = tl.load(in_ptr3 + (x0 + (768*tmp18)), None)
+        tmp21 = tmp6 + tmp20
+        tmp23 = tmp21 + tmp22
+        tl.store(out_ptr0 + (x2), tmp23, None)
+op1_op2_op3_op5.snodes[1] =
+op2: SchedulerNode(ComputedBuffer)
+op2.writes = [MemoryDep('buf2', c0, {c0: 4096}, None)]
+op2.unmet_dependencies = [MemoryDep('buf1', c0, {c0: 3145728}, None)]
+op2.met_dependencies = []
+op2.outputs = [
+    buf2: ComputedBuffer
+    buf2.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+    buf2.users = [NodeUser(node=SchedulerNode(name='op5'), can_inplace=False, is_weak=False)]
+]
+op2.group.device = cuda:0
+op2.group.iteration = (4096, 768)
+op2.sizes = ([4096], [768])
+buf1_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+buf2_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+class op2_loop_body:
+    var_ranges = {z0: 4096, z1: 768}
+    index0 = 768*z0 + z1
+    index1 = z0
+    def body(self, ops):
+        get_index = self.get_index('index0')
+        load = ops.load('buf1', get_index)
+        reduction = ops.reduction(torch.float32, torch.float32, 'welford_reduce', load)
+        getitem = reduction[0]
+        getitem_1 = reduction[1]
+        getitem_2 = reduction[2]
+        get_index_1 = self.get_index('index1')
+        store_reduction = ops.store_reduction('buf2', get_index_1, getitem)
+        return store_reduction
+op2 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.persistent_reduction(
+        size_hints=[4096, 1024],
+        reduction_hint=ReductionHint.INNER,
+        filename=__file__,
+        triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: 'i32', 3: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': True, 'num_load': 1, 'num_reduction': 3, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False}
+    )
+    @triton.jit
+    def triton_(in_ptr0, out_ptr0, xnumel, rnumel):
+        xnumel = 4096
+        XBLOCK: tl.constexpr = 1
+        rnumel = 768
+        RBLOCK: tl.constexpr = 1024
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = tl.full([1], xoffset, tl.int32)
+        xmask = tl.full([RBLOCK], True, tl.int1)
+        rindex = tl.arange(0, RBLOCK)[:]
+        roffset = 0
+        rmask = rindex < rnumel
+        r1 = rindex
+        x0 = xindex
+        tmp0 = tl.load(in_ptr0 + (r1 + (768*x0)), rmask, other=0.0)
+        tmp1 = tl.broadcast_to(tmp0, [RBLOCK])
+        tmp3 = tl.where(rmask, tmp1, 0)
+        tmp4 = tl.broadcast_to(tmp1, [RBLOCK])
+        tmp6 = tl.where(rmask, tmp4, 0)
+        tmp7 = triton_helpers.promote_to_tensor(tl.sum(tmp6, 0))
+        tmp8 = tl.full([1], 768, tl.int32)
+        tmp9 = tmp8.to(tl.float32)
+        tmp10 = tmp7 / tmp9
+        tmp11 = tmp1 - tmp10
+        tmp12 = tmp11 * tmp11
+        tmp13 = tl.broadcast_to(tmp12, [RBLOCK])
+        tmp15 = tl.where(rmask, tmp13, 0)
+        tmp16 = triton_helpers.promote_to_tensor(tl.sum(tmp15, 0))
+        tl.store(out_ptr0 + (x0), tmp10, None)
+op1_op2_op3_op5.snodes[2] =
+op3: SchedulerNode(ComputedBuffer)
+op3.writes = [MemoryDep('buf3', c0, {c0: 4096}, None)]
+op3.unmet_dependencies = [MemoryDep('buf1', c0, {c0: 3145728}, None)]
+op3.met_dependencies = []
+op3.outputs = [
+    buf3: ComputedBuffer
+    buf3.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+    buf3.users = [NodeUser(node=SchedulerNode(name='op5'), can_inplace=False, is_weak=False)]
+]
+op3.group.device = cuda:0
+op3.group.iteration = (4096, 768)
+op3.sizes = ([4096], [768])
+buf1_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+buf3_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+class op3_loop_body:
+    var_ranges = {z0: 4096, z1: 768}
+    index0 = 768*z0 + z1
+    index1 = z0
+    def body(self, ops):
+        get_index = self.get_index('index0')
+        load = ops.load('buf1', get_index)
+        reduction = ops.reduction(torch.float32, torch.float32, 'welford_reduce', load)
+        getitem = reduction[0]
+        getitem_1 = reduction[1]
+        getitem_2 = reduction[2]
+        get_index_1 = self.get_index('index1')
+        store_reduction = ops.store_reduction('buf3', get_index_1, getitem_1)
+        return store_reduction
+op3 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.persistent_reduction(
+        size_hints=[4096, 1024],
+        reduction_hint=ReductionHint.INNER,
+        filename=__file__,
+        triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: 'i32', 3: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': True, 'num_load': 1, 'num_reduction': 3, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False}
+    )
+    @triton.jit
+    def triton_(in_ptr0, out_ptr0, xnumel, rnumel):
+        xnumel = 4096
+        XBLOCK: tl.constexpr = 1
+        rnumel = 768
+        RBLOCK: tl.constexpr = 1024
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = tl.full([1], xoffset, tl.int32)
+        xmask = tl.full([RBLOCK], True, tl.int1)
+        rindex = tl.arange(0, RBLOCK)[:]
+        roffset = 0
+        rmask = rindex < rnumel
+        r1 = rindex
+        x0 = xindex
+        tmp0 = tl.load(in_ptr0 + (r1 + (768*x0)), rmask, other=0.0)
+        tmp1 = tl.broadcast_to(tmp0, [RBLOCK])
+        tmp3 = tl.where(rmask, tmp1, 0)
+        tmp4 = tl.broadcast_to(tmp1, [RBLOCK])
+        tmp6 = tl.where(rmask, tmp4, 0)
+        tmp7 = triton_helpers.promote_to_tensor(tl.sum(tmp6, 0))
+        tmp8 = tl.full([1], 768, tl.int32)
+        tmp9 = tmp8.to(tl.float32)
+        tmp10 = tmp7 / tmp9
+        tmp11 = tmp1 - tmp10
+        tmp12 = tmp11 * tmp11
+        tmp13 = tl.broadcast_to(tmp12, [RBLOCK])
+        tmp15 = tl.where(rmask, tmp13, 0)
+        tmp16 = triton_helpers.promote_to_tensor(tl.sum(tmp15, 0))
+        tl.store(out_ptr0 + (x0), tmp16, None)
+op1_op2_op3_op5.snodes[3] =
+op5: SchedulerNode(ComputedBuffer)
+op5.writes = [MemoryDep('buf5', c0, {c0: 3145728}, None)]
+op5.unmet_dependencies = 
+    [   MemoryDep('buf1', c0, {c0: 3145728}, None),
+        MemoryDep('buf2', c0, {c0: 4096}, None),
+        MemoryDep('buf3', c0, {c0: 4096}, None)]
+op5.met_dependencies = 
+    [   MemoryDep('arg3_1', c1, {c0: 4096, c1: 768}, None),
+        MemoryDep('arg4_1', c1, {c0: 4096, c1: 768}, None)]
+op5.outputs = [
+    buf5: ComputedBuffer
+    buf5.layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+    buf5.users = [NodeUser(node=OUTPUT, can_inplace=False, is_weak=False)]
+]
+op5.group.device = cuda:0
+op5.group.iteration = (3145728, 1)
+op5.sizes = ([4096, 768], [])
+buf1_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+buf2_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+buf3_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 1], stride=[1024, 1, 4096])
+arg3_1_layout = FixedLayout('cuda', torch.float32, size=[768], stride=[1])
+arg4_1_layout = FixedLayout('cuda', torch.float32, size=[768], stride=[1])
+buf5_layout = FixedLayout('cuda', torch.float32, size=[4, 1024, 768], stride=[786432, 768, 1])
+class op5_loop_body:
+    var_ranges = {z0: 4096, z1: 768}
+    index0 = 768*z0 + z1
+    index1 = z0
+    index2 = z1
+    def body(self, ops):
+        get_index = self.get_index('index0')
+        load = ops.load('buf1', get_index)
+        get_index_1 = self.get_index('index1')
+        load_1 = ops.load('buf2', get_index_1)
+        sub = ops.sub(load, load_1)
+        get_index_2 = self.get_index('index1')
+        load_2 = ops.load('buf3', get_index_2)
+        constant = ops.constant(768.0, torch.float32)
+        truediv = ops.truediv(load_2, constant)
+        constant_1 = ops.constant(1e-05, torch.float32)
+        add = ops.add(truediv, constant_1)
+        rsqrt = ops.rsqrt(add)
+        mul = ops.mul(sub, rsqrt)
+        get_index_3 = self.get_index('index2')
+        load_3 = ops.load('arg3_1', get_index_3)
+        mul_1 = ops.mul(mul, load_3)
+        get_index_4 = self.get_index('index2')
+        load_4 = ops.load('arg4_1', get_index_4)
+        add_1 = ops.add(mul_1, load_4)
+        get_index_5 = self.get_index('index0')
+        store = ops.store('buf5', get_index_5, add_1, None)
+        return store
+op5 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.pointwise(
+        size_hints=[4194304], 
+        filename=__file__,
+        triton_meta={'signature': {0: '*fp32', 1: '*fp32', 2: '*fp32', 3: '*fp32', 4: '*fp32', 5: '*fp32', 6: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3, 4, 5, 6), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': False, 'num_load': 5, 'num_reduction': 0, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False},
+        min_elem_per_thread=0
+    )
+    @triton.jit
+    def triton_(in_ptr0, in_ptr1, in_ptr2, in_ptr3, in_ptr4, out_ptr0, xnumel, XBLOCK : tl.constexpr):
+        xnumel = 3145728
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = xoffset + tl.arange(0, XBLOCK)[:]
+        xmask = tl.full([XBLOCK], True, tl.int1)
+        x2 = xindex
+        x1 = (xindex // 768)
+        x0 = xindex % 768
+        tmp0 = tl.load(in_ptr0 + (x2), None)
+        tmp1 = tl.load(in_ptr1 + (x1), None, eviction_policy='evict_last')
+        tmp3 = tl.load(in_ptr2 + (x1), None, eviction_policy='evict_last')
+        tmp10 = tl.load(in_ptr3 + (x0), None, eviction_policy='evict_last')
+        tmp12 = tl.load(in_ptr4 + (x0), None, eviction_policy='evict_last')
+        tmp2 = tmp0 - tmp1
+        tmp4 = 768.0
+        tmp5 = tmp3 / tmp4
+        tmp6 = 1e-05
+        tmp7 = tmp5 + tmp6
+        tmp8 = libdevice.rsqrt(tmp7)
+        tmp9 = tmp2 * tmp8
+        tmp11 = tmp9 * tmp10
+        tmp13 = tmp11 + tmp12
+        tl.store(out_ptr0 + (x2), tmp13, None)
+op1_op2_op3_op5 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.persistent_reduction(
+        size_hints=[4096, 1024],
+        reduction_hint=ReductionHint.INNER,
+        filename=__file__,
+        triton_meta={'signature': {0: '*i64', 1: '*fp32', 2: '*i64', 3: '*fp32', 4: '*fp32', 5: '*fp32', 6: '*fp32', 7: '*fp32', 8: '*fp32', 9: 'i32', 10: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': True, 'num_load': 5, 'num_reduction': 4, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False}
+    )
+    @triton.jit
+    def triton_(in_ptr0, in_ptr1, in_ptr2, in_ptr3, in_ptr4, in_ptr5, in_ptr6, out_ptr0, out_ptr3, xnumel, rnumel):
+        xnumel = 4096
+        XBLOCK: tl.constexpr = 1
+        rnumel = 768
+        RBLOCK: tl.constexpr = 1024
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = tl.full([1], xoffset, tl.int32)
+        xmask = tl.full([RBLOCK], True, tl.int1)
+        rindex = tl.arange(0, RBLOCK)[:]
+        roffset = 0
+        rmask = rindex < rnumel
+        x0 = xindex
+        r1 = rindex
+        tmp0 = tl.load(in_ptr0 + (x0), None, eviction_policy='evict_last')
+        tmp7 = tl.load(in_ptr2 + (x0), None, eviction_policy='evict_last')
+        tmp22 = tl.load(in_ptr4 + (r1), rmask, eviction_policy='evict_last', other=0.0)
+        tmp47 = tl.load(in_ptr5 + (r1), rmask, eviction_policy='evict_last', other=0.0)
+        tmp49 = tl.load(in_ptr6 + (r1), rmask, eviction_policy='evict_last', other=0.0)
+        tmp1 = tl.full([RBLOCK], 50265, tl.int32)
+        tmp2 = tmp0 + tmp1
+        tmp3 = tmp0 < 0
+        tmp4 = tl.where(tmp3, tmp2, tmp0)
+        tl.device_assert((0 <= tmp4) & (tmp4 < 50265), "index out of bounds: 0 <= tmp4 < 50265")
+        tmp6 = tl.load(in_ptr1 + (r1 + (768*tmp4)), rmask, other=0.0)
+        tmp8 = tmp7.to(tl.int32)
+        tmp9 = tl.full([1], 1, tl.int64)
+        tmp10 = tmp0 != tmp9
+        tmp11 = tmp10.to(tl.int32)
+        tmp12 = tmp8 * tmp11
+        tmp13 = tmp12.to(tl.int64)
+        tmp14 = tmp13 + tmp9
+        tmp15 = tl.full([RBLOCK], 4098, tl.int32)
+        tmp16 = tmp14 + tmp15
+        tmp17 = tmp14 < 0
+        tmp18 = tl.where(tmp17, tmp16, tmp14)
+        tl.device_assert((0 <= tmp18) & (tmp18 < 4098), "index out of bounds: 0 <= tmp18 < 4098")
+        tmp20 = tl.load(in_ptr3 + (r1 + (768*tmp18)), rmask, other=0.0)
+        tmp21 = tmp6 + tmp20
+        tmp23 = tmp21 + tmp22
+        tmp24 = tl.broadcast_to(tmp23, [RBLOCK])
+        tmp26 = tl.where(rmask, tmp24, 0)
+        tmp27 = tl.broadcast_to(tmp24, [RBLOCK])
+        tmp29 = tl.where(rmask, tmp27, 0)
+        tmp30 = triton_helpers.promote_to_tensor(tl.sum(tmp29, 0))
+        tmp31 = tl.full([1], 768, tl.int32)
+        tmp32 = tmp31.to(tl.float32)
+        tmp33 = tmp30 / tmp32
+        tmp34 = tmp24 - tmp33
+        tmp35 = tmp34 * tmp34
+        tmp36 = tl.broadcast_to(tmp35, [RBLOCK])
+        tmp38 = tl.where(rmask, tmp36, 0)
+        tmp39 = triton_helpers.promote_to_tensor(tl.sum(tmp38, 0))
+        tmp40 = tmp23 - tmp33
+        tmp41 = 768.0
+        tmp42 = tmp39 / tmp41
+        tmp43 = 1e-05
+        tmp44 = tmp42 + tmp43
+        tmp45 = libdevice.rsqrt(tmp44)
+        tmp46 = tmp40 * tmp45
+        tmp48 = tmp46 * tmp47
+        tmp50 = tmp48 + tmp49
+        tl.store(out_ptr0 + (r1 + (768*x0)), tmp23, rmask)
+        tl.store(out_ptr3 + (r1 + (768*x0)), tmp50, rmask)
+
+
+op6: SchedulerNode(ComputedBuffer)
+op6.writes = [MemoryDep('buf6', c0, {c0: 4096}, None)]
+op6.unmet_dependencies = []
+op6.met_dependencies = []
+op6.outputs = [
+    buf6: ComputedBuffer
+    buf6.layout = FixedLayout('cuda', torch.float32, size=[4, 1, 1, 1024], stride=[1024, 1, 4096, 1])
+    buf6.users = [NodeUser(node=OUTPUT, can_inplace=False, is_weak=False)]
+]
+op6.group.device = cuda:0
+op6.group.iteration = (4096, 1)
+op6.sizes = ([4096], [])
+buf6_layout = FixedLayout('cuda', torch.float32, size=[4, 1, 1, 1024], stride=[1024, 1, 4096, 1])
+class op6_loop_body:
+    var_ranges = {z0: 4096}
+    index0 = z0
+    def body(self, ops):
+        constant = ops.constant(-0.0, torch.float32)
+        get_index = self.get_index('index0')
+        store = ops.store('buf6', get_index, constant, None)
+        return store
+op6 Triton code:
+    import triton
+    import triton.language as tl
+    from triton.compiler.compiler import AttrsDescriptor
+
+    from torch._inductor.runtime import triton_helpers, triton_heuristics
+    from torch._inductor.runtime.triton_helpers import libdevice, math as tl_math
+    from torch._inductor.runtime.hints import AutotuneHint, ReductionHint, TileHint, instance_descriptor, DeviceProperties
+
+    @triton_heuristics.pointwise(
+        size_hints=[4096], 
+        filename=__file__,
+        triton_meta={'signature': {0: '*fp32', 1: 'i32'}, 'device': DeviceProperties(type='cuda', index=0, cc=90, major=9, regs_per_multiprocessor=65536, max_threads_per_multi_processor=2048, multi_processor_count=132), 'constants': {}, 'configs': [AttrsDescriptor(divisible_by_16=(0, 1), equal_to_1=())]},
+        inductor_meta={'autotune_hints': set(), 'kernel_name': 'Placeholder.DESCRIPTIVE_NAME', 'mutated_arg_names': [], 'no_x_dim': False, 'num_load': 0, 'num_reduction': 0, 'backend_hash': 'AF2498D67158CAADADFFD49D59358CB8F5E4B1FCD1FBD49EE9B7C2D9E5D02859', 'are_deterministic_algorithms_enabled': False, 'assert_indirect_indexing': True, 'autotune_local_cache': True, 'autotune_pointwise': True, 'autotune_remote_cache': None, 'force_disable_caches': False, 'dynamic_scale_rblock': True, 'max_autotune': False, 'max_autotune_pointwise': False, 'min_split_scan_rblock': 256, 'spill_threshold': 16, 'store_cubin': False},
+        min_elem_per_thread=0
+    )
+    @triton.jit
+    def triton_(out_ptr0, xnumel, XBLOCK : tl.constexpr):
+        xnumel = 4096
+        xoffset = tl.program_id(0) * XBLOCK
+        xindex = xoffset + tl.arange(0, XBLOCK)[:]
+        xmask = tl.full([XBLOCK], True, tl.int1)
+        x0 = xindex
+        tmp0 = -0.0
+        tl.store(out_ptr0 + (x0), tmp0, None)
+
+
