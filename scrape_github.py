@@ -11,7 +11,7 @@ def search_github_code(query, per_page=10, page=1):
     url = f"https://api.github.com/search/code?q={query}&per_page={per_page}&page={page}"
     headers = {"Accept": "application/vnd.github.v3+json"}
     response = requests.get(url, headers=headers, auth=HTTPBasicAuth(GITHUB_USERNAME, GITHUB_TOKEN))
-    print(response.json())
+    # print(response.json())
     response.raise_for_status()
     return response.json()
 
@@ -32,7 +32,7 @@ def main():
     max_files = 1000
     total_tokens = 0
     total_files = 0
-    page = 100
+    page = 1
     while total_files < max_files:
         search_results = search_github_code(query, per_page=100, page=page)
         if not search_results.get("items"):
@@ -48,7 +48,7 @@ def main():
                 total_tokens += len(tokens)
                 total_files += 1
                 # dump the file content to a file
-                with open(f"github_triton_data/file_{total_files}.txt", "w") as f:
+                with open(f"github_triton_data/file_{total_files}.py", "w") as f:
                     f.write(file_content)
                 if total_files % 100 == 0:
                     print(f"Total tokens: {total_tokens}")
