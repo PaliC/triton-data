@@ -278,44 +278,6 @@ class PyTorchModuleExtractor(object):
             except Exception:
                 log.exception("global_config error")
 
-    def test_modules(self):
-        for name, value in list(sorted(self.output.items())):
-            if self.should_test_cls(value):
-                self.test_nn_module(name, value)
-
-    def should_test_cls(self, cls):
-        if not isinstance(cls, type):  # check if is class
-            return False
-        if not issubclass(cls, torch.nn.Module):  # check if is torch module
-            return False
-        if issubclass(cls, DistributedDataParallel):
-            return False
-        return self.output.same_module(cls)
-
-    def test_nn_module(self, name: str, nn_cls: type):
-        if self.args.filter and self.args.filter not in name:
-            return
-
-        self.stats["total"] += 1
-        checker = CheckCallableMembers.run(
-            self.name_to_ast.get(name)
-        )  # get modules inside module
-
-        try:
-            stats, errors, testcases = call_with_timeout(
-                extract_nn_module,
-                args=(name, nn_cls, checker, self.errors.context),
-                timeout=300,
-            )
-            self.errors.update(errors)
-            self.stats.update(stats)
-            self.testcases.extend(testcases)
-        except OSError as os:
-            log.exception("test_nn_module OS error: {}".format(os))
-            self.stats["module_crash"] += 1
-        except TimeoutError:
-            self.stats["module_timeout"] += 1
-
     def main(self, filename: str):
         basename = re.sub(r"[.]zip$", "", os.path.basename(filename))
 
@@ -329,92 +291,8 @@ class PyTorchModuleExtractor(object):
             self.search_zipfile(filename)
 
         self.construct_module()  # run and write ast nodes
-        self.test_modules()
-        self.write_testcases(basename)
 
         log.info(f"{basename}: {self.stats}")
-
-    def write_testcases(self, basename):
-        if not self.testcases:
-            return
-        self.output.write(SUFFIX.format(basename=basename))
-        self.output.write("\nTESTCASES = [\n")
-        self.output.write("    # (nn.Module, init_args, forward_args, jit_compiles)\n")
-        for name, init_args, forward_args, compiles in self.testcases:
-            self.output.write(f"    ({name},\n")
-            self.output.write(f"     lambda: ({init_args[0]}, {init_args[1]}),\n")
-            self.output.write(f"     lambda: ({forward_args[0]}, {forward_args[1]}),\n")
-            self.output.write(f"     {repr(compiles)}),\n")
-        self.output.write("]\n\n")
-
-        self.output.write(f"class Test_{basename}(_paritybench_base):\n")
-        for index in range(len(self.testcases)):
-            self.output.write(f"    def test_{index:03}(self):\n")
-            self.output.write(f"        self._check(*TESTCASES[{index}])\n\n")
-
-
-def extract_nn_module(name: str, nn_cls: type, checker, context):
-    errors = ErrorAggregatorDict(context)
-    stats = Stats()
-    testcases = []
-    extract_nn_module_inner(name, nn_cls, checker, stats, errors, testcases)
-    return stats, errors, testcases
-
-
-def extract_nn_module_inner(name: str, nn_cls: type, checker, stats, errors, testcases):
-    """
-    name: name of the module
-    nn_cls: module class type
-    checker: modules inside nn_cls module
-    mode: what to test module with: ts, onnx, etc
-    """
-    init_signature = inspect.signature(nn_cls)  # get args for init of module
-    try:
-        init_deducer = DeduceParameters(
-            nn_cls,
-            *DeduceParameters.initial_args_init(init_signature),
-            checker=checker.check,
-        )
-        init_deducer.search()
-        nn_module = init_deducer.last_result
-    except Exception as e:
-        return errors.record("init", e, nn_cls)
-
-    try:
-        nn_module.eval()
-    except:
-        pass
-
-    stats["init_ok"] += 1
-
-    forward_signature = inspect.signature(
-        nn_module.forward
-    )  # get args for forward of module
-    try:
-        forward_deducer = DeduceParameters(
-            nn_module, *DeduceParameters.initial_args_forward(forward_signature)
-        )
-        forward_deducer.search()
-    except Exception as e:
-        return errors.record("deduce", e, nn_cls)
-
-    stats["deduced_args_ok"] += 1
-
-    try:
-        torch.jit.script(nn_module)
-
-    except Exception as e:
-        testcases.append(
-            (name, init_deducer.testcase_args(), forward_deducer.testcase_args(), False)
-        )
-
-        return errors.record("compile", e, nn_cls)
-
-    stats["jit_compiles"] += 1
-
-    testcases.append(
-        (name, init_deducer.testcase_args(), forward_deducer.testcase_args(), True)
-    )
 
 
 class IncrementalModule(object):
