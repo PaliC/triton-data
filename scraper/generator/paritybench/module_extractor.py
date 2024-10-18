@@ -29,7 +29,7 @@ from .utils import call_with_timeout
 
 log = logging.getLogger(__name__)
 
-NN_MODULE_RE = re.compile(r"(\btorch\b)|(\bnn[.]Module\b)", re.MULTILINE)
+TRITON_RE = re.compile(r"(\btriton\b)|(\btriton[.]jit\b)", re.MULTILINE)
 PREFIX = f"""
 from _paritybench_helpers import _mock_config, patch_functional
 from unittest.mock import mock_open, MagicMock
@@ -109,7 +109,7 @@ class PyTorchModuleExtractor(object):
             if isinstance(source, bytes):
                 source = source.decode("utf-8")
 
-        has_match = bool(NN_MODULE_RE.search(source))  # there is torch in .py
+        has_match = bool(TRITON_RE.search(source))  # there is torch in .py
 
         try:
             tree = self.ast_parse(source, filename)
