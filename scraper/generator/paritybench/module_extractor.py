@@ -14,9 +14,7 @@ from typing import List, TextIO
 import astor
 import torch
 import triton
-from torch.nn.parallel import DistributedDataParallel
 
-from .deduce_parameters import DeduceParameter, DeduceParameters
 from .reporting import ErrorAggregatorDict, Stats
 from .static_analysis import (
     ASTCleanup,
