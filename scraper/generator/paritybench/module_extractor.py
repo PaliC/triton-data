@@ -13,6 +13,7 @@ from typing import List, TextIO
 
 import astor
 import torch
+import triton
 from torch.nn.parallel import DistributedDataParallel
 
 from .deduce_parameters import DeduceParameter, DeduceParameters
@@ -92,14 +93,13 @@ class PyTorchModuleExtractor(object):
 
         self.imports = dict()
         self.constants = []
-        self.nn_module_names = []  # list of nn modules in the input project
 
         self.available_symbols = dict()
         self.global_config = None
 
         self.testcases = []
         self.args = args
-        self.triton_kernel_names = []
+        self.triton_kernel_names = []  # list of triton kernels in the input project
 
     def search_file(self, filename: str, open_fn=open):
         """get module from filename .py file"""
@@ -166,8 +166,6 @@ class PyTorchModuleExtractor(object):
             if isinstance(node, ast.ClassDef):
                 self.add_available_symbol(node, overwrite)
                 bases = [to_source(x).strip() for x in node.bases]
-                if overwrite and any(self.is_torch_nn_module(scope, x) for x in bases):
-                    self.nn_module_names.append(node.name)
             elif isinstance(node, (ast.Import, ast.ImportFrom)):
                 if overwrite:
                     for module_name, import_node in split_import(node):
@@ -180,18 +178,6 @@ class PyTorchModuleExtractor(object):
                 self.triton_kernel_names.append(node.name)
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Assign)):
                 self.add_available_symbol(node, overwrite)
-
-    def is_torch_nn_module(self, scope: types.ModuleType, base: str):
-        if base in ("torch.nn.Module", "nn.Module", "Module"):
-            return True
-        if base.split(".")[-1] in self.nn_module_names:
-            return True
-        try:
-            for part in base.split("."):
-                scope = getattr(scope, part, object)
-            return issubclass(scope, torch.nn.Module)
-        except Exception:
-            log.exception("Error in is_torch_nn_module()")
 
     def search_directory(self, filename: str):
         for root, _, files in os.walk(filename, topdown=False):
