@@ -7,8 +7,6 @@ from functools import partial
 import torch
 import torch._dynamo
 
-from paritybench.crawler import CrawlGitHub
-from paritybench.evaluate import evaluate_all, evaluate_pyfile_subproc
 from paritybench.generate import generate_all, generate_zipfile_subproc, write_helpers
 from paritybench.utils import subproc_wrapper, tempdir_wrapper
 
