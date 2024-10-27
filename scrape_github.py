@@ -89,7 +89,7 @@ def main():
         url = f"https://github.com/{repo}/archive/refs/heads/main.zip"
         response = requests.get(url)
         repo_name = repo.replace("/", "_")  # Replace '/' with '_' for valid filename
-        with open(os.path.join("downloads", f"{repo_name}.zip"), "wb") as f:
+        with open(os.path.join("scraper/generator/paritybench_download", f"{repo_name}.zip"), "wb") as f:
             f.write(response.content)
         print(f"Downloaded {repo_name}.zip")
 
