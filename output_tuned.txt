@@ -1,0 +1,74 @@
+INFO:torchtune.utils._logging:Running InferenceRecipe with resolved config:
+
+chat_format: null
+checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir: /tmp/Llama-3.2-3B/
+  checkpoint_files:
+  - hf_model_0001_0.pt
+  - hf_model_0002_0.pt
+  model_type: LLAMA3
+  output_dir: /tmp/Llama-3.2-3B/
+device: cuda
+dtype: bf16
+enable_kv_cache: true
+instruct_template: null
+max_new_tokens: 2024
+model:
+  _component_: torchtune.models.llama3_2.llama3_2_3b
+prompt: '<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+  Cutting Knowledge Date: December 2023 Today Date: 29 October 2024
+
+  You are an AI assistant who helps software engineers write triton kernels which
+  is a type of gpu kernel written in python.t<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+  Write a Triton kernel function that performs matrix multiplication on two 1024x1024
+  matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M =
+  128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated
+  from corresponding blocks in A and B with a tiled approach; use tl.load with masking
+  to handle boundaries, accumulate partial sums, and store the result in C; include
+  Python host code to launch the kernel with proper grid/block sizes, and verify correctness
+  by comparing with torch.matmul, ensuring accuracy within 1e-4.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+  '
+quantizer: null
+seed: 1234
+temperature: 0.1
+tokenizer:
+  _component_: torchtune.models.llama3.llama3_tokenizer
+  max_seq_len: null
+  path: /tmp/Llama-3.2-3B/original/tokenizer.model
+top_k: 1048576
+
+DEBUG:torchtune.utils._logging:Setting manual seed to local seed 1234. Local seed is seed + rank = 1234 + 0
+INFO:torchtune.utils._logging:Model is initialized with precision torch.bfloat16.
+INFO:torchtune.utils._logging:system
+Cutting Knowledge Date: December 2023 Today Date: 29 October 2024
+You are an AI assistant who helps software engineers write triton kernels which is a type of gpu kernel written in python.tuser
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+def matrix_mul_kernel(a_ptr, b_ptr, c_ptr, BLOCK_SIZE_M: int, BLOCK_SIZE_N: int, BLOCK_SIZE_K: int):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+    a = a_ptr + pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)
+    b = b_ptr + pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)
+    c = c_ptr + pid_m * BLOCK_SIZE_M + pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_K)
+    mask_m = pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M) < 1024
+    mask_n = pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N) < 1024
+    mask_k = pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)[:, None] < 1024
+    mask_j = pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)[None, :] < 1024
+    a = tl.load(a, mask=mask_m[:, None])
+    b = tl.load(b, mask=mask_n[None, :])
+    c = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+    for k in range(0, 1024, BLOCK_SIZE_K):
+        a_k = a + k
+        b_k = b + k
+        a_k = tl.load(a_k, mask=mask_k, other=0)
+        b_k = tl.load(b_k, mask=mask_j, other=0)
+        c += tl.dot(a_k, b_k)
+    c = tl.where(mask_m[:, None] & mask_n[None, :], c, 0)
+    tl.store(c, c, mask=mask_m[:, None])
+
+INFO:torchtune.utils._logging:Time for inference: 9.98 sec total, 39.67 tokens/sec
+INFO:torchtune.utils._logging:Bandwidth achieved: 288.40 GB/s
+INFO:torchtune.utils._logging:Memory used: 8.00 GB

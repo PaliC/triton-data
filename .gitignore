@@ -22,4 +22,7 @@ rad.json
 TestResults.xml
 
 downloads/
+<<<<<<< HEAD
 scraper/generator/paritybench_downloads/
+=======
+>>>>>>> 3094a4b (hopefully this fixes things)

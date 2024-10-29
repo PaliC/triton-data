@@ -1,0 +1,66 @@
+INFO:torchtune.utils._logging:Running InferenceRecipe with resolved config:
+
+chat_format: null
+checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir: /tmp/Llama-3.2-3B/
+  checkpoint_files:
+  - model-00001-of-00002.safetensors
+  - model-00002-of-00002.safetensors
+  model_type: LLAMA3
+  output_dir: /tmp/Llama-3.2-3B/
+device: cuda
+dtype: bf16
+enable_kv_cache: true
+instruct_template: null
+max_new_tokens: 2024
+model:
+  _component_: torchtune.models.llama3_2.llama3_2_3b
+prompt: '<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+  Cutting Knowledge Date: December 2023 Today Date: 29 October 2024
+
+  You are an AI assistant who helps software engineers write triton kernels which
+  is a type of gpu kernel written in python.t<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+  Write a Triton kernel function that performs matrix multiplication on two 1024x1024
+  matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M =
+  128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated
+  from corresponding blocks in A and B with a tiled approach; use tl.load with masking
+  to handle boundaries, accumulate partial sums, and store the result in C; include
+  Python host code to launch the kernel with proper grid/block sizes, and verify correctness
+  by comparing with torch.matmul, ensuring accuracy within 1e-4.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+  '
+quantizer: null
+seed: 1234
+temperature: 0.1
+tokenizer:
+  _component_: torchtune.models.llama3.llama3_tokenizer
+  max_seq_len: null
+  path: /tmp/Llama-3.2-3B/original/tokenizer.model
+top_k: 1048576
+
+DEBUG:torchtune.utils._logging:Setting manual seed to local seed 1234. Local seed is seed + rank = 1234 + 0
+INFO:torchtune.utils._logging:Model is initialized with precision torch.bfloat16.
+INFO:torchtune.utils._logging:system
+Cutting Knowledge Date: December 2023 Today Date: 29 October 2024
+You are an AI assistant who helps software engineers write triton kernels which is a type of gpu kernel written in python.tuser
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with a tiled approach; use tl.load with masking to handle boundaries, accumulate partial sums, and store the result in C; include Python host code to launch the kernel with proper grid/block sizes, and verify correctness by comparing with torch.matmul, ensuring accuracy within 1e-4.assistant
+Write a Triton kernel function that performs matrix multiplication on two 1024x1024 matrices A and B, resulting in a 1024x1024 output matrix C, using BLOCK_SIZE_M = 128, BLOCK_SIZE_N = 128, and BLOCK_SIZE_K = 32; ensure each block in C is calculated from corresponding blocks in A and B with
+INFO:torchtune.utils._logging:Time for inference: 50.78 sec total, 39.85 tokens/sec
+INFO:torchtune.utils._logging:Bandwidth achieved: 289.77 GB/s
+INFO:torchtune.utils._logging:Memory used: 9.67 GB

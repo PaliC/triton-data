@@ -1,0 +1,48 @@
+# Config for running the InferenceRecipe in generate.py to generate output from an LLM
+#
+# To launch, run the following command from root torchtune directory:
+#    tune run generate --config generation
+
+# Model arguments
+model:
+  _component_: torchtune.models.llama3_2.llama3_2_90b
+
+checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir: /tmp/Llama-3.2-90B/original/
+  checkpoint_files: [
+    consolidated.00.pth,
+    consolidated.01.pth,
+    consolidated.02.pth,
+    consolidated.03.pth,
+    consolidated.04.pth,
+    consolidated.05.pth,
+    consolidated.06.pth,
+    consolidated.07.pth,
+  ]
+  output_dir: /tmp/Llama-3.2-90B/
+  model_type: LLAMA3
+
+device: cuda
+dtype: bf16
+
+seed: 1234
+
+# Tokenizer arguments
+tokenizer:
+  _component_: torchtune.models.llama3.llama3_tokenizer
+  path: /tmp/Llama-3.2-90B/original/tokenizer.model
+  max_seq_len: null
+
+# Generation arguments; defaults taken from gpt-fast
+prompt : "You are tasked with creating a Triton kernel for matrix multiplication. Your primary goal is to ensure correctness in the implementation. Follow these instructions carefully to create an efficient and accurate matrix multiplication kernel using Triton. Correctness is the most important factor, keep these requirements in mind during optimization. Write the triton kernel."
+# prompt: "What's your favorite type of weather"
+instruct_template: null
+chat_format: null
+max_new_tokens: 2024
+temperature: 0.1 # 0.8 and 0.6 are popular values to try
+top_k: 1048576
+
+enable_kv_cache: True
+
+quantizer: null

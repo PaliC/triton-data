@@ -1,6 +1,7 @@
 import os
 import json
 import ast
+import astor
 
 def find_triton_jit_functions(directories):
     """
@@ -26,14 +27,14 @@ def find_triton_jit_functions(directories):
                                         if (decorator.attr == 'jit' and 
                                             isinstance(decorator.value, ast.Name) and 
                                             decorator.value.id == 'triton'):
+                                            # Create a module with just this function
+                                            new_module = ast.Module(
+                                                body=[node],
+                                                type_ignores=[]  # Required for Python 3.8+
+                                            )
                                             
-                                            # Get the function source code
-                                            start_lineno = node.lineno
-                                            end_lineno = node.end_lineno
-                                            with open(file_path, 'r') as f:
-                                                lines = f.readlines()
-                                                func_body = ''.join(lines[start_lineno-1:end_lineno])
-                                                
+                                            # Use astor to convert back to source code
+                                            func_body = astor.to_source(new_module)
                                             triton_functions.append({"input": func_body})
                     except Exception as e:
                         print(f"Error processing file {file_path}: {str(e)}")
@@ -49,13 +50,25 @@ def main():
         sys.exit(1)
     
     directories = sys.argv[1:]
+<<<<<<< HEAD
+=======
+    print(f"Searching for triton functions in directories: {directories}")
+>>>>>>> 3094a4b (hopefully this fixes things)
     
     # Find triton functions and convert to JSON
     triton_funcs = find_triton_jit_functions(directories)
     json_output = json.dumps(triton_funcs, indent=2)
     
+<<<<<<< HEAD
     # Output JSON to stdout
     print(json_output)
+=======
+    print(f"Found {len(triton_funcs)} triton functions")
+
+    # save to file
+    with open('datasets/triton_functions.json', 'w') as f:
+        f.write(json_output)
+>>>>>>> 3094a4b (hopefully this fixes things)
 
 if __name__ == "__main__":
     main()
