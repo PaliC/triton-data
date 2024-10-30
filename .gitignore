@@ -23,3 +23,5 @@ TestResults.xml
 
 downloads/
 scraper/generator/paritybench_downloads/
+
+.env
