@@ -50,25 +50,18 @@ def main():
         sys.exit(1)
     
     directories = sys.argv[1:]
-<<<<<<< HEAD
-=======
+
     print(f"Searching for triton functions in directories: {directories}")
->>>>>>> 3094a4b (hopefully this fixes things)
     
     # Find triton functions and convert to JSON
     triton_funcs = find_triton_jit_functions(directories)
     json_output = json.dumps(triton_funcs, indent=2)
     
-<<<<<<< HEAD
-    # Output JSON to stdout
-    print(json_output)
-=======
     print(f"Found {len(triton_funcs)} triton functions")
 
     # save to file
     with open('datasets/triton_functions.json', 'w') as f:
         f.write(json_output)
->>>>>>> 3094a4b (hopefully this fixes things)
 
 if __name__ == "__main__":
     main()
