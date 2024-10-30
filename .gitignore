@@ -22,6 +22,5 @@ rad.json
 TestResults.xml
 
 downloads/
-scraper/generator/paritybench_downloads/
-
+scraper/generator/paritybench_download/
 .env
