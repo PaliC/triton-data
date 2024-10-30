@@ -4,41 +4,49 @@ import tiktoken
 import time
 import os
 import pprint
+from dotenv import load_dotenv
+import json
+from typing import Optional, Dict, Any
+from urllib.request import Request, urlopen
 
-# TODO:
-# Replace these with your GitHub username and personal access token
-GITHUB_USERNAME = "PaliC"
 # before making this public, kill this token
-GITHUB_TOKEN = "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"
+# GITHUB_TOKEN = "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"
 
-# get github token from .env file
-# if .env file isn't set tell user to copy .env.example to .env and set the token
-if os.path.exists('.env'):
-    with open('.env') as f:
-        for line in f:
-            if line.startswith('GITHUB_TOKEN='):
-                GITHUB_TOKEN = line.split('=')[1].strip()
-else:
+# get GITHUB_TOKEN from .env file
+load_dotenv()
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+if GITHUB_TOKEN is None:
     print("No .env file found. Please copy .env.example to .env and set the GITHUB_TOKEN variable.")
     print("Instructions for getting a personal access token are here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens")
     exit(1)
 
+def github_api_request(
+    url: str,
+    data: Optional[Dict[str, Any]] = None,
+    token: Optional[str] = None,
+) -> Any:
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    if token is not None:
+        headers["Authorization"] = f"token {token}"
+
+    _data = json.dumps(data).encode() if data is not None else None
+    try:
+        with urlopen(Request(url, headers=headers, data=_data)) as conn:
+            return json.load(conn)
+    except Exception as err:
+        print(f"Failed to get {url}: {err}")
+
 def search_github_code(query, per_page=10, page=1, smallest_size=100, largest_size=10000):
     # wait for 10 seconds
     time.sleep(10)
+    
     url = f"https://api.github.com/search/code?q={query}&per_page={per_page}&page={page}"
-    headers = {"Accept": "application/vnd.github.v3+json"}
-    response = requests.get(url, headers=headers, auth=HTTPBasicAuth(GITHUB_USERNAME, GITHUB_TOKEN))
-    # print(response.json())
-    response.raise_for_status()
-    return response.json()
+
+    return github_api_request(url, token=GITHUB_TOKEN)
 
 def get_file_content(repo_full_name, path):
     url = f"https://api.github.com/repos/{repo_full_name}/contents/{path}"
-    headers = {"Accept": "application/vnd.github.v3+json"}
-    response = requests.get(url, headers=headers, auth=HTTPBasicAuth(GITHUB_USERNAME, GITHUB_TOKEN))
-    response.raise_for_status()
-    content = response.json()
+    content = github_api_request(url, token=GITHUB_TOKEN)
     # The file content is base64 encoded, decode it
     import base64
     file_content = base64.b64decode(content['content']).decode('utf-8')
@@ -46,10 +54,7 @@ def get_file_content(repo_full_name, path):
 
 def search_github_repos(query, per_page=100, page=1, smallest_size=100, largest_size=10000):
     url = f"https://api.github.com/search/repositories?q={query}&per_page={per_page}&page={page}"
-    headers = {"Accept": "application/vnd.github.v3+json"}
-    response = requests.get(url, headers=headers, auth=HTTPBasicAuth(GITHUB_USERNAME, GITHUB_TOKEN))
-    response.raise_for_status()
-    return response.json()
+    return github_api_request(url, token=GITHUB_TOKEN)
 
 def get_repos_with_triton_mention():
     # Search for repos containing 'triton' or `pytorch` in the README, with more than 100 stars
