@@ -11,6 +11,18 @@ GITHUB_USERNAME = "PaliC"
 # before making this public, kill this token
 GITHUB_TOKEN = "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"
 
+# get github token from .env file
+# if .env file isn't set tell user to copy .env.example to .env and set the token
+if os.path.exists('.env'):
+    with open('.env') as f:
+        for line in f:
+            if line.startswith('GITHUB_TOKEN='):
+                GITHUB_TOKEN = line.split('=')[1].strip()
+else:
+    print("No .env file found. Please copy .env.example to .env and set the GITHUB_TOKEN variable.")
+    print("Instructions for getting a personal access token are here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens")
+    exit(1)
+
 def search_github_code(query, per_page=10, page=1, smallest_size=100, largest_size=10000):
     # wait for 10 seconds
     time.sleep(10)
