@@ -1,3 +1,16 @@
+## 2024/11/13
+A lot development has happened with https://github.com/PaliC/popcorn-eval
+
+### Change in function format
+Now when generating the dataset, all functions are annotated with
+```python
+{{function body}}
+```
+
+which is what you expect to get out of an llm as it denotes code. The dataset has been updated to reflect this.
+Generation of dataset remains the same.
+
+
 ## 2024/29/10 and the times before
 - Initial Data collection
 	- Initially we were looking to figure out a decent dataset we can use in order to train an llm to produce triton kernels with.

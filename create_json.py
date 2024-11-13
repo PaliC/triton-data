@@ -42,6 +42,16 @@ def find_triton_jit_functions(directories):
     
     return triton_functions
 
+def add_python_annotatations(functions : list[str]):
+    """
+    Format each function as ```python\n {function}\n```
+    """
+    new_functions = []
+    for function_dict in functions:
+        function = function_dict["input"]
+        new_functions.append({"input": f"```python\n{function}\n```"})
+    return new_functions
+
 def main():
     # Get directories from command line arguments
     import sys
