@@ -9,9 +9,6 @@ import json
 from typing import Optional, Dict, Any
 from urllib.request import Request, urlopen
 
-# before making this public, kill this token
-# GITHUB_TOKEN = "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"
-
 # get GITHUB_TOKEN from .env file
 load_dotenv()
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")

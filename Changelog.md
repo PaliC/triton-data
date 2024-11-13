@@ -74,7 +74,7 @@ tune run full_finetune_single_device --config tune_configs/llama_3_config.yaml e
 We then do some generations. I created them by running some configs which point to the generated fine tuned model and the base model
 
 ```bash
-tune run generate --config ./tune_configs/gen_llama3_3b_finetune_config.yam 2> output_base.txt
+tune run generate --config ./tune_configs/gen_llama3_3b_finetune_config.yaml 2> output_base.txt
 tune run generate --config ./tune_configs/gen_llama3_3b_original_config.yaml 2> output_tuned.txt
 ```
 
