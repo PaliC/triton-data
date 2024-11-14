@@ -1,0 +1,66 @@
+INFO:torchtune.utils._logging:Logging /tmp/Llama-3.2-11B-Vision-Instruct/torchtune_config.yaml to W&B under Files
+INFO:torchtune.utils._logging:FSDP is enabled. Instantiating model and loading checkpoint on Rank 0 ...
+INFO:torchtune.utils._logging:Instantiating model and loading checkpoint took 4.03 secs
+INFO:torchtune.utils._logging:Memory stats after model init:
+	GPU peak memory allocation: 5.90 GiB
+	GPU peak memory reserved: 6.05 GiB
+	GPU peak memory active: 5.90 GiB
+INFO:torchtune.utils._logging:Optimizer is initialized.
+INFO:torchtune.utils._logging:Loss is initialized.
+INFO:torchtune.utils._logging:Dataset and Sampler are initialized.
+WARNING:torchtune.utils._logging: Profiling disabled.
+INFO:torchtune.utils._logging: Profiler config after instantiation: {'enabled': False}
+  0%|                                          | 0/49 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 760, in <module>
+    sys.exit(recipe_main())
+             ^^^^^^^^^^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/config/_parse.py", line 99, in wrapper
+    sys.exit(recipe_main(conf))
+             ^^^^^^^^^^^^^^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 755, in recipe_main
+    recipe.train()
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 612, in train
+    for idx, batch in enumerate(self._dataloader):
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 757, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 55, in fetch
+    return self.collate_fn(data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/data/_collate.py", line 353, in padded_collate_tiled_images_and_mask
+    max_num_tiles = max(
+                    ^^^^
+  File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/data/_collate.py", line 356, in <genexpr>
+    for image in sample["encoder_input"]["images"]
+                 ~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'encoder_input'
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 760, in <module>
+[rank0]:     sys.exit(recipe_main())
+[rank0]:              ^^^^^^^^^^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/config/_parse.py", line 99, in wrapper
+[rank0]:     sys.exit(recipe_main(conf))
+[rank0]:              ^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 755, in recipe_main
+[rank0]:     recipe.train()
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py", line 612, in train
+[rank0]:     for idx, batch in enumerate(self._dataloader):
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+[rank0]:     data = self._next_data()
+[rank0]:            ^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 757, in _next_data
+[rank0]:     data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 55, in fetch
+[rank0]:     return self.collate_fn(data)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/data/_collate.py", line 353, in padded_collate_tiled_images_and_mask
+[rank0]:     max_num_tiles = max(
+[rank0]:                     ^^^^
+[rank0]:   File "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/torchtune/data/_collate.py", line 356, in <genexpr>
+[rank0]:     for image in sample["encoder_input"]["images"]
+[rank0]:                  ~~~~~~^^^^^^^^^^^^^^^^^
+[rank0]: KeyError: 'encoder_input'

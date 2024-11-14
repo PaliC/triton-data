@@ -1,0 +1,19 @@
+{"time":"2024-11-13T17:34:24.653085225-08:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-11-13T17:34:24.653102011-08:00","level":"INFO","msg":"created symlink","path":"/home/sahanp/triton-data/wandb/run-20241113_173424-n44ytukl/logs/debug-core.log"}
+{"time":"2024-11-13T17:34:26.969188117-08:00","level":"INFO","msg":"created new stream","id":"n44ytukl"}
+{"time":"2024-11-13T17:34:26.969235449-08:00","level":"INFO","msg":"stream: started","id":"n44ytukl"}
+{"time":"2024-11-13T17:34:26.969257142-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:34:26.96926887-08:00","level":"INFO","msg":"handler: started","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:34:26.969317174-08:00","level":"INFO","msg":"sender: started","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:34:28.949401555-08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-13T17:46:22.448142233-08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-13T17:46:22.448856385-08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-13T17:46:22.823166705-08:00","level":"WARN","msg":"No program path found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job"}
+{"time":"2024-11-13T17:46:22.823210642-08:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-11-13T17:46:23.448610125-08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading torchtune_config.yaml","runtime_seconds":0.190965346,"progress":"1.5KB/1.5KB"}],"total_operations":1}}
+{"time":"2024-11-13T17:46:23.473787734-08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-13T17:46:24.608512358-08:00","level":"INFO","msg":"stream: closing","id":"n44ytukl"}
+{"time":"2024-11-13T17:46:24.608541954-08:00","level":"INFO","msg":"handler: closed","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:46:24.608554823-08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:46:24.608611911-08:00","level":"INFO","msg":"sender: closed","stream_id":"n44ytukl"}
+{"time":"2024-11-13T17:46:24.608616968-08:00","level":"INFO","msg":"stream: closed","id":"n44ytukl"}

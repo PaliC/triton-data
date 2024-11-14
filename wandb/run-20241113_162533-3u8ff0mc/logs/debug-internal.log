@@ -1,0 +1,10 @@
+{"time":"2024-11-13T16:25:33.509830091-08:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-11-13T16:25:33.509845084-08:00","level":"INFO","msg":"created symlink","path":"/home/sahanp/triton-data/wandb/run-20241113_162533-3u8ff0mc/logs/debug-core.log"}
+{"time":"2024-11-13T16:25:33.817716585-08:00","level":"INFO","msg":"created new stream","id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:33.817751258-08:00","level":"INFO","msg":"stream: started","id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:33.817810308-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:33.817871051-08:00","level":"INFO","msg":"sender: started","stream_id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:33.817816157-08:00","level":"INFO","msg":"handler: started","stream_id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:33.822755278-08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai on [2401:db00:eef0:b53::]:53: server misbehaving"}
+{"time":"2024-11-13T16:25:34.173250964-08:00","level":"INFO","msg":"stream: closing","id":"3u8ff0mc"}
+{"time":"2024-11-13T16:25:35.983966475-08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai on [2401:db00:eef0:b53::]:53: server misbehaving"}

@@ -1,0 +1,87 @@
+{
+  "os": "Linux-6.4.3-0_fbk14_zion_2601_gcd42476b84e9-x86_64-with-glibc2.34",
+  "python": "3.11.10",
+  "startedAt": "2024-11-14T01:12:15.613126Z",
+  "args": [
+    "--config",
+    "tune_configs/llama_3_70bconfig.yaml"
+  ],
+  "program": "/home/sahanp/.conda/envs/parity-bench/lib/python3.11/site-packages/recipes/full_finetune_distributed.py",
+  "git": {
+    "remote": "git@github.com:PaliC/triton-data.git",
+    "commit": "e56ae7a8a4fb24151b0184ee59f6f535affb7158"
+  },
+  "email": "sahancpal@gmail.com",
+  "root": "/home/sahanp/triton-data",
+  "host": "devgpu086.cco2.facebook.com",
+  "username": "sahanp",
+  "executable": "/home/sahanp/.conda/envs/parity-bench/bin/python",
+  "cpu_count": 192,
+  "cpu_count_logical": 384,
+  "gpu": "NVIDIA H100",
+  "gpu_count": 8,
+  "disk": {
+    "/": {
+      "total": "3837956980736",
+      "used": "409020694528"
+    }
+  },
+  "memory": {
+    "total": "2434139848704"
+  },
+  "cpu": {
+    "count": 192,
+    "countLogical": 384
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100",
+      "memoryTotal": "102625181696",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    }
+  ],
+  "cudaVersion": "12.0"
+}

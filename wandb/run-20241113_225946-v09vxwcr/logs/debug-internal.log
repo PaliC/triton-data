@@ -1,0 +1,18 @@
+{"time":"2024-11-13T22:59:46.85468019-08:00","level":"INFO","msg":"using version","core version":"0.18.7"}
+{"time":"2024-11-13T22:59:46.854691017-08:00","level":"INFO","msg":"created symlink","path":"/home/sahanp/triton-data/wandb/run-20241113_225946-v09vxwcr/logs/debug-core.log"}
+{"time":"2024-11-13T22:59:47.063154826-08:00","level":"INFO","msg":"created new stream","id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:47.063187325-08:00","level":"INFO","msg":"stream: started","id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:47.063221417-08:00","level":"INFO","msg":"writer: Do: started","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:47.063245694-08:00","level":"INFO","msg":"handler: started","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:47.063320188-08:00","level":"INFO","msg":"sender: started","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:47.382048908-08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-13T22:59:55.880777742-08:00","level":"INFO","msg":"stream: closing","id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:55.880819726-08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-13T22:59:55.881498361-08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-13T22:59:55.958500622-08:00","level":"WARN","msg":"No program path found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job"}
+{"time":"2024-11-13T22:59:55.958520432-08:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-11-13T22:59:56.686747602-08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-13T22:59:56.991453102-08:00","level":"INFO","msg":"handler: closed","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:56.991491721-08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:56.991502297-08:00","level":"INFO","msg":"sender: closed","stream_id":"v09vxwcr"}
+{"time":"2024-11-13T22:59:56.991550681-08:00","level":"INFO","msg":"stream: closed","id":"v09vxwcr"}

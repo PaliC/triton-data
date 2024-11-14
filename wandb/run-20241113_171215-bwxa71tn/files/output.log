@@ -1,0 +1,77 @@
+INFO:torchtune.utils._logging:Logging //tmp/Llama-3.1-70B/torchtune_config.yaml to W&B under Files
+INFO:torchtune.utils._logging:FSDP is enabled. Instantiating model and loading checkpoint on Rank 0 ...
+INFO:torchtune.utils._logging:Instantiating model and loading checkpoint took 70.48 secs
+INFO:torchtune.utils._logging:Memory stats after model init:
+	GPU peak memory allocation: 2.76 GiB
+	GPU peak memory reserved: 2.78 GiB
+	GPU peak memory active: 2.76 GiB
+INFO:torchtune.utils._logging:Optimizer is initialized.
+INFO:torchtune.utils._logging:Loss is initialized.
+INFO:torchtune.utils._logging:Dataset and Sampler are initialized.
+WARNING:torchtune.utils._logging: Profiling disabled.
+INFO:torchtune.utils._logging: Profiler config after instantiation: {'enabled': False}
+1|394|Loss: 0.03893423452973366: 100%|██████████████████████████████| 394/394 [52:19<00:00,  7.78s/it]INFO:torchtune.utils._logging:Model checkpoint of size 4.58 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0001_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0002_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0003_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0004_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0005_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0006_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0007_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0008_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0009_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0010_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0011_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0012_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0013_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0014_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0015_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0016_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0017_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0018_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0019_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0020_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0021_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0022_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0023_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0024_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0025_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0026_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0027_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0028_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0029_0.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 2.10 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0030_0.pt
+INFO:torchtune.utils._logging:Recipe checkpoint of size 282.22 GB saved to /tmp/Meta-Llama-3-70b/recipe_state.pt
+1|394|Loss: 0.03893423452973366: 100%|██████████████████████████████| 394/394 [59:49<00:00,  9.11s/it]
+  0%|                                                                         | 0/394 [00:00<?, ?it/s]INFO:torchtune.utils._logging:Model checkpoint of size 4.58 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0001_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0002_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0003_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0004_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0005_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0006_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0007_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0008_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0009_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0010_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0011_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0012_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0013_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0014_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0015_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0016_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0017_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0018_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0019_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0020_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0021_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0022_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0023_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0024_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0025_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0026_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.66 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0027_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 5.00 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0028_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 4.97 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0029_1.pt
+INFO:torchtune.utils._logging:Model checkpoint of size 2.10 GB saved to /tmp/Meta-Llama-3-70b/hf_model_0030_1.pt
+INFO:torchtune.utils._logging:Saving final epoch checkpoint.
+INFO:torchtune.utils._logging:The full model checkpoint, including all weights and configurations, has been saved successfully.You can now use this checkpoint for further training or inference.
+2|788|Loss: 0.0190565325319767: 100%|███████████████████████████████| 394/394 [50:57<00:00,  7.76s/it]

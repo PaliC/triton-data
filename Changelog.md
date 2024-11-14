@@ -10,6 +10,12 @@ Now when generating the dataset, all functions are annotated with
 which is what you expect to get out of an llm as it denotes code. The dataset has been updated to reflect this.
 Generation of dataset remains the same.
 
+We also added a finetuning config for llama70b
+This can be run by doing
+```
+tune download meta-llama/Meta-Llama-3-70B-Instruct --output-dir //tmp/Llama-3.1-70B  --ignore-patterns "original/consolidated*" --hf-token <HF_TOKEN>
+tune run --nproc_per_node 8 full_finetune_distributed --config tune_confgs/llama_3_70bconfig.yaml
+```
 
 ## 2024/29/10 and the times before
 - Initial Data collection
