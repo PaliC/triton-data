@@ -17,8 +17,11 @@ def get_ptx_data(directory: str) -> List[Dict[str, str]]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scrape PTX data from a directory")
     parser.add_argument("--directory", type=str, help="Directory to scrape PTX data from")
+    parser.add_argument("--output_file", type=str, help="Output file to save PTX data to")
     args = parser.parse_args()
     ptx_data = get_ptx_data(args.directory)
+    with open(args.output_file, "w") as f:
+        json.dump(ptx_data, f)
     # use tiktoken to count tokens
     encoding = tiktoken.encoding_for_model("gpt-4o")
     total_tokens = 0
