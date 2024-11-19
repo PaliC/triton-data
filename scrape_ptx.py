@@ -3,6 +3,15 @@ from typing import Dict, List
 import json
 import argparse
 import tiktoken
+import re
+def data_transformations(data: str) -> str:
+    # remove comments, remove all lines that start with //
+    data = re.sub(r'\/\/.*\n', '', data)
+    # if there is more than one space, replace with one space
+    data = re.sub(r'\s+', ' ', data)
+    # if there is more than one newline, replace with one newline
+    data = re.sub(r'\n+', '\n', data)
+    return data
 
 # get all ptx_data from directory including subdirectories and return a list of dicts {"input": ptx}
 def get_ptx_data(directory: str) -> List[Dict[str, str]]:
@@ -11,7 +20,8 @@ def get_ptx_data(directory: str) -> List[Dict[str, str]]:
         for file in files:
             if file.endswith('.ptx'):
                 with open(os.path.join(root, file), 'r') as f:
-                    ptx_data.append({"input": f.read()})
+                    data = f.read()
+                    ptx_data.append({"input": data_transformations(data)})
     return ptx_data
 
 if __name__ == "__main__":
