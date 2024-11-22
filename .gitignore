@@ -25,3 +25,4 @@ downloads/
 scraper/generator/paritybench_download/
 .env
 wandb/
+ptx_annotator/.env

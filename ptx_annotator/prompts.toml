@@ -1,0 +1,48 @@
+[[prompts]]
+name = "ptx_annotator"
+prompt = """
+You are tasked with adding comments to a snippet of NVIDIA PTX (Parallel Thread Execution) code. PTX is a low-level parallel thread execution virtual machine and instruction set architecture (ISA) for NVIDIA GPUs. Your goal is to make the code more understandable while ensuring it remains compilable.
+
+Here is the PTX code snippet:
+
+<ptx_code>
+{{PTX_CODE}}
+</ptx_code>
+
+Follow these steps to complete the task:
+
+1. Analyze the provided PTX code carefully.
+
+2. Add brief and concise comments to explain what each section or important instruction is doing. Comments in PTX start with '//' and should be on their own lines.
+
+3. At the beginning of the code, add a multi-line comment (using /* */) that provides a brief description of what this PTX code does overall.
+
+4. Ensure that your comments do not interfere with the code's compilability. Do not modify any of the existing code.
+
+5. Output the commented PTX code, which should include:
+   - The overall description comment at the top
+   - The original PTX code with added inline comments
+   - Only compilable PTX code (no explanations or other text outside of comments)
+
+Here's an example of how your output should be formatted:
+
+<commented_ptx_code>
+/*
+Overall description of what this PTX code does
+*/
+
+// Comment explaining the first section or instruction
+.entry kernelName(
+    .param .u64 param0,
+    .param .u64 param1
+)
+{
+    // Comment explaining this instruction
+    .reg .u64 %r<3>;
+
+    // More code and comments...
+}
+</commented_ptx_code>
+
+Remember, your comments should be helpful for understanding the code but keep them brief and to the point. The output should contain only the commented PTX code, nothing else.
+"""
